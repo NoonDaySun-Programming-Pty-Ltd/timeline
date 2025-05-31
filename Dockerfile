@@ -28,8 +28,16 @@ RUN docker-php-ext-install \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Create Caddy configuration
-RUN echo "{\n\tauto_https off\n}\n\n:80 {\n\troot * /var/www/html/public\n\tphp_server\n}" > /etc/caddy/Caddyfile
+RUN cat <<EOF > /etc/caddy/Caddyfile
+{
+    auto_https off
+}
 
+:80 {
+    root * /var/www/html/public
+    php_server
+}
+EOF
 # Set permissions for Laravel
 RUN mkdir -p /var/www/html/storage/logs \
     && mkdir -p /var/www/html/storage/framework/sessions \
