@@ -1,0 +1,129 @@
+@startuml Timeline ER Diagram
+
+hide circle
+skinparam linetype ortho
+
+' Define entities
+entity "People" as people {
+  *id : integer <<generated>>
+  --
+  title : enum
+  *first_name : text
+  middle_name : text
+  *last_name : text
+  *email : text
+  avatar: text
+  *created_at : timestamp
+  deleted_at : timestamp
+  *updated_at : timestamp
+}
+
+entity "Users" as users {
+  *id : integer <<generated>>
+  --
+  *person_id : integer <<FK>>
+  *password : text
+  *created_at : timestamp
+  deleted_at : timestamp
+  *updated_at : timestamp
+}
+
+entity "Events" as events {
+  *id : integer <<generated>>
+  --
+  *title : text
+  *description : text
+  *start_date : datetime
+  end_date : datetime
+  category_id : integer <<FK>>
+  location : point
+  is_all_day : boolean
+  *created_at : timestamp
+  deleted_at : timestamp
+  *updated_at : timestamp
+  *created_by_id : integer <<FK>>
+  deleted_by_id : integer <<FK>>
+  *updated_by_id : integer <<FK>>
+}
+
+entity "Categories" as categories {
+  *id : integer <<generated>>
+  --
+  *name : text
+  *color : integer
+  *created_at : timestamp
+  deleted_at : timestamp
+  *updated_at : timestamp
+}
+
+entity "Tags" as tags {
+  *id : integer <<generated>>
+  --
+  *name : text
+  *created_at : timestamp
+  deleted_at : timestamp
+  *updated_at : timestamp
+}
+
+entity "EventTag" as event_tag {
+  *event_id : integer <<FK>>
+  *tag_id : integer <<FK>>
+  --
+  *created_at : timestamp
+  deleted_at : timestamp
+  *updated_at : timestamp
+}
+
+entity "Images" as images {
+  *id : integer <<generated>>
+  --
+  *location : text
+  *created_at : timestamp
+  deleted_at : timestamp
+  *updated_at : timestamp
+}
+
+entity "EventImage" as event_image {
+  *event_id : integer <<FK>>
+  *image_id : integer <<FK>>
+  --
+  *created_at : timestamp
+  deleted_at : timestamp
+  *updated_at : timestamp
+}
+
+entity "EventPeople" as event_people {
+  *event_id : integer <<FK>>
+  *person_id : integer <<FK>>
+  --
+  *created_at : timestamp
+  deleted_at : timestamp
+  *updated_at : timestamp
+}
+
+entity "Reminders" as reminders {
+  *id : integer <<generated>>
+  --
+  *event_id : integer <<FK>>
+  *remind_at : datetime
+  *created_at : timestamp
+  deleted_at : timestamp
+  *updated_at : timestamp
+}
+
+' Define relationships
+people ||--o| users : has
+users ||--o{ events : creates
+categories ||--o{ events : categorizes
+events }|--|| reminders : has
+events }o--o{ tags : has >
+event_tag }|--|| events : belongs to
+event_tag }|--|| tags : belongs to
+events }o--o{ images : has >
+event_image }|--|| events : belongs to
+event_image }|--|| images : belongs to
+events }o--o{ people : has >
+event_people }|--|| events : belongs to
+event_people }|--|| people : belongs to
+
+@enduml
