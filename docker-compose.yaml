@@ -1,0 +1,47 @@
+services:
+  timeline:
+    build: .
+    container_name: timeline_app
+    depends_on:
+      - pgsql
+    labels:
+      org.label-schema.group: "application"
+    networks:
+      - timeline
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+      - "${HTTPS_PORT:-443}:443/udp"
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/html
+      - caddy_config:/config
+      - caddy_data:/data
+
+  pgsql:
+    container_name: timeline_db
+    env_file:
+      - .env
+    environment:
+      - "POSTGRES_DB=${DB_DATABASE}"
+      - "POSTGRES_USER=${DB_USERNAME}"
+      - "POSTGRES_PASSWORD=${DB_PASSWORD}"
+    image: postgres:15.14-alpine3.22
+    labels:
+      org.label-schema.group: "database"
+    networks:
+      - timeline
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    restart: unless-stopped
+    volumes:
+      - sqldata:/var/lib/postgresql/dat
+
+networks:
+  timeline:
+    external: true
+
+volumes:
+  caddy_config:
+  caddy_data:
+  sqldata:
