@@ -6,6 +6,8 @@ services:
       - pgsql
     labels:
       org.label-schema.group: "application"
+      version: "0.0.1"
+      maintainer: "Noon Day Sun Programming"
     networks:
       - timeline
     ports:
@@ -26,7 +28,7 @@ services:
       - "POSTGRES_DB=${DB_DATABASE}"
       - "POSTGRES_USER=${DB_USERNAME}"
       - "POSTGRES_PASSWORD=${DB_PASSWORD}"
-    image: postgres:15.14-alpine3.22
+    image: postgres:17.6-alpine3.22
     labels:
       org.label-schema.group: "database"
     networks:
@@ -35,7 +37,7 @@ services:
       - "${DB_PORT:-5432}:5432"
     restart: unless-stopped
     volumes:
-      - sqldata:/var/lib/postgresql/dat
+      - sqldata:/var/lib/postgresql/data
 
 networks:
   timeline:

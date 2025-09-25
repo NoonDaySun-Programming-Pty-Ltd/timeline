@@ -1,5 +1,6 @@
 # Timeline
-A time line for personal events
+
+A timeline for personal events
 
 ## Docker Setup with FrankenPHP
 
@@ -8,7 +9,7 @@ This project uses FrankenPHP, a modern PHP application server built on top of Ca
 ### Prerequisites
 
 - Docker
-- Docker Compose (optional)
+- Docker Compose
 
 ### Getting Started
 
@@ -19,26 +20,10 @@ This project uses FrankenPHP, a modern PHP application server built on top of Ca
    ```
 3. Run the container:
    ```
-   docker run -p 80:80 timeline
+   export HTTP_PORT=8080 HTTPS_PORT=444; 
+   docker network create timeline; docker compose up -d
    ```
-4. Access the application at http://localhost
-
-### Development with VS Code
-
-This project includes a devcontainer configuration for VS Code. To use it:
-
-1. Install the "Remote - Containers" extension in VS Code
-2. Open the project folder in VS Code
-3. Click "Reopen in Container" when prompted
-4. VS Code will build the container and open the project inside it
-
-### FrankenPHP Features
-
-- High-performance PHP application server
-- Built-in HTTP/2 and HTTP/3 support
-- Early Hints support
-- Automatic HTTPS
-- PHP worker process management
+4. Access the application at https://localhost:${HTTPS_PORT}
 
 ## Database Schema
 
